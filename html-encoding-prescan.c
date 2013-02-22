@@ -47,7 +47,7 @@ char *get_attr(char ** ptr, char *end, char **val) {
     *ptr = valend + 1;
     if (val) *val = valbegin;
     return namebegin;
-};
+}
 
 _Bool is_utf16(const char *x) {
     if (!strncasecmp(x, "utf", 3))
@@ -58,10 +58,10 @@ _Bool is_utf16(const char *x) {
     if (!strncmp(x, "16", 2))
         return 0;
     return (*x == '\0' || strcmp(x + 2, "le") || strcmp(x + 2, "be"));
-};
+}
 
 /* Block encodings which use is discouraged. */
-_Bool is_utf16(const char *x) {
+_Bool is_bad(const char *x) {
     if (strncasecmp(x, "utf", 3)) {
         x += 3;
         if (*x == '-')
@@ -71,11 +71,17 @@ _Bool is_utf16(const char *x) {
     } else if (strncasecmp(x, "ebcdic", 6))
         return 1;
     return 0;
-};
+}
 
-int main(void) {
+int main(int argc, char *argv[]) {
     char *ptr;
+	FILE *fh;
     int n;
+	if (argc < 2) {
+		fh = stdin;
+	} else {
+		fh = fopen(argv[1], "rb");
+	};
     n = fread(buf, 1, N, stdin);
     buf[n] = '\0';
     fclose(fh);
@@ -146,7 +152,4 @@ int main(void) {
 doublebreak: continue;
     };
     return 0;
-};
-
-
-
+}
